@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "461359841319",
+    "project_id": "collect-and-recycle",
+    "storage_bucket": "collect-and-recycle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461359841319:android:a539116e119cda245e4e02",
+        "android_client_info": {
+          "package_name": "com.app.collectandrecycle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWOm0kieSh-6iAdR1s9dP3ymOj-f5ESFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -32,4 +32,8 @@
     <string name="select_type">Select Type</string>
     <string name="emptychar"> </string>
     <string name="select_item">Select Item</string>
+    <string name="show_requests">Show Requests</string>
+    <string name="items">Items</string>
+    <string name="categories">Categories</string>
+    <string name="coverage_area">Coverage Area</string>
 </resources>

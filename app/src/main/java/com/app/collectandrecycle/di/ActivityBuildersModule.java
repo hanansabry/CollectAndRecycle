@@ -3,6 +3,7 @@ package com.app.collectandrecycle.di;
 
 import com.app.collectandrecycle.di.modules.AuthenticationViewModelModule;
 import com.app.collectandrecycle.di.modules.BaseViewModelModule;
+import com.app.collectandrecycle.di.modules.OrganizationViewModelModule;
 import com.app.collectandrecycle.presentation.BaseActivity;
 import com.app.collectandrecycle.presentation.MainActivity;
 import com.app.collectandrecycle.presentation.SplashActivity;
@@ -35,7 +36,7 @@ public abstract class ActivityBuildersModule {
     @ContributesAndroidInjector
     abstract ClientHomeActivity contributeClientHomeActivity();
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = OrganizationViewModelModule.class)
     abstract OrganizationHomeActivity contributeOrganizationHomeActivity();
 
 }

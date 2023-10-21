@@ -38,4 +38,7 @@
     <string name="coverage_area">Coverage Area</string>
     <string name="select_regions">Select Regions</string>
     <string name="select">Select</string>
+    <string name="add_category">Add Category</string>
+    <string name="select_image">Select Image</string>
+    <string name="category_name">Category Name</string>
 </resources>

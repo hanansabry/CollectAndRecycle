@@ -12,6 +12,8 @@ import com.app.collectandrecycle.databinding.ActivityOrganizationHomeBinding;
 import com.app.collectandrecycle.di.ViewModelProviderFactory;
 import com.app.collectandrecycle.presentation.BaseActivity;
 import com.app.collectandrecycle.presentation.MainActivity;
+import com.app.collectandrecycle.presentation.categories.AddCategoryActivity;
+import com.app.collectandrecycle.presentation.categories.CategoriesViewModel;
 import com.app.collectandrecycle.presentation.regions.RegionListActivity;
 import com.app.collectandrecycle.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,8 +32,10 @@ public class OrganizationHomeActivity extends BaseActivity {
     @Inject
     ViewModelProviderFactory providerFactory;
     private OrganizationViewModel organizationViewModel;
+    private CategoriesViewModel categoriesViewModel;
     private ActivityOrganizationHomeBinding binding;
     private OrganizationMainItemsAdapter regionsAdapter;
+    private OrganizationMainItemsAdapter categoriesAdapter;
 
     @Override
     public View getDataBindingView() {
@@ -46,8 +50,9 @@ public class OrganizationHomeActivity extends BaseActivity {
         binding.setName("ABC");
 
         organizationViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(OrganizationViewModel.class);
+        categoriesViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(CategoriesViewModel.class);
         organizationViewModel.retrieveRegions(sessionManager.getFirebaseId());
-        organizationViewModel.retrieveCategories(sessionManager.getFirebaseId());
+        categoriesViewModel.retrieveCategories(sessionManager.getFirebaseId());
         organizationViewModel.retrieveItems(sessionManager.getFirebaseId());
 
         organizationViewModel.getRegionsLiveData().observe(this, regions -> {
@@ -57,11 +62,11 @@ public class OrganizationHomeActivity extends BaseActivity {
             binding.regionsRecyclerview.setAdapter(regionsAdapter);
         });
 
-        organizationViewModel.getCategoriesLiveData().observe(this, categories -> {
-            OrganizationMainItemsAdapter adapter = new OrganizationMainItemsAdapter(null, categories, null, Category.class.getName());
+        categoriesViewModel.getCategoriesLiveData().observe(this, categories -> {
+            categoriesAdapter = new OrganizationMainItemsAdapter(null, categories, null, Category.class.getName());
             LinearLayoutManager layout = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
             binding.categoriesRecyclerview.setLayoutManager(layout);
-            binding.categoriesRecyclerview.setAdapter(adapter);
+            binding.categoriesRecyclerview.setAdapter(categoriesAdapter);
         });
 
         organizationViewModel.getItemsLiveData().observe(this, items -> {
@@ -79,10 +84,17 @@ public class OrganizationHomeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.SELECTED_REGIONS_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data != null) {
-                ArrayList<Region> selectedRegions = data.getParcelableArrayListExtra(Constants.SELECTED_REGIONS);
-                regionsAdapter.addRegions(selectedRegions);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Constants.SELECTED_REGIONS_REQUEST_CODE) {
+                if (data != null) {
+                    ArrayList<Region> selectedRegions = data.getParcelableArrayListExtra(Constants.SELECTED_REGIONS);
+                    regionsAdapter.addRegions(selectedRegions);
+                }
+            } else if (requestCode == Constants.ADD_CATEGORY_REQUEST_CODE) {
+                if (data != null) {
+                    Category category = data.getParcelableExtra(Constants.CATEGORY);
+                    categoriesAdapter.addCategory(category);
+                }
             }
         }
     }
@@ -100,7 +112,7 @@ public class OrganizationHomeActivity extends BaseActivity {
     }
 
     public void onAddCategoryClicked(View view) {
-        Toast.makeText(this, "Category", Toast.LENGTH_SHORT).show();
+        startActivityForResult(new Intent(this, AddCategoryActivity.class), Constants.ADD_CATEGORY_REQUEST_CODE);
     }
 
     public void onAddItemClicked(View view) {

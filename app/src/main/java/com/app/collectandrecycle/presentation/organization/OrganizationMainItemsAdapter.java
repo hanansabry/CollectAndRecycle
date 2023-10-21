@@ -3,10 +3,12 @@ package com.app.collectandrecycle.presentation.organization;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.app.collectandrecycle.R;
 import com.app.collectandrecycle.data.Category;
 import com.app.collectandrecycle.data.Item;
 import com.app.collectandrecycle.data.Region;
 import com.app.collectandrecycle.databinding.OrganizationMainItemLayoutBinding;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +79,15 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
         }
     }
 
-    static class MainItemHolder extends RecyclerView.ViewHolder {
+    public void addCategory(Category category) {
+        if (categories != null) {
+            int insertPosition = categories.size();
+            categories.add(category);
+            notifyItemInserted(insertPosition);
+        }
+    }
+
+    class MainItemHolder extends RecyclerView.ViewHolder {
 
         private final OrganizationMainItemLayoutBinding binding;
 
@@ -92,6 +102,12 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
 
         private void bindCategory(Category category) {
             binding.setName(category.getName());
+            if (category.getImage() != null) {
+                Glide.with(itemView.getContext())
+                        .load(category.getImage())
+                        .placeholder(R.drawable.map)
+                        .into(binding.imageView);
+            }
         }
 
         private void bindItem(Item item) {

@@ -16,4 +16,6 @@ public class Constants {
     public static final String ADMIN = "admin";
     public static final int SELECTED_REGIONS_REQUEST_CODE = 522;
     public static final String SELECTED_REGIONS = "selected_regions";
+    public static final int ADD_CATEGORY_REQUEST_CODE = 111;
+    public static final String CATEGORY = "category";
 }

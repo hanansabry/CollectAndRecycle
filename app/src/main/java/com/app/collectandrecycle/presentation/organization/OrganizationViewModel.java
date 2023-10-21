@@ -17,7 +17,6 @@ import androidx.lifecycle.MutableLiveData;
 public class OrganizationViewModel extends BaseViewModel {
 
     private final MutableLiveData<List<Region>> regionsLiveData = new MutableLiveData<>();
-    private final MutableLiveData<List<Category>> categoriesLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Item>> itemsLiveData = new MutableLiveData<>();
 
     @Inject
@@ -58,19 +57,6 @@ public class OrganizationViewModel extends BaseViewModel {
         regionsLiveData.postValue(regions);
     }
 
-    public void retrieveCategories(String organizationId) {
-        Category r1 = new Category();
-        r1.setName("Category 1");
-
-        Category r2 = new Category();
-        r2.setName("Category 2");
-        List<Category> categories = new ArrayList<>();
-        categories.add(r1);
-        categories.add(r2);
-
-        categoriesLiveData.postValue(categories);
-    }
-
     public void retrieveItems(String organizationId) {
         Item r1 = new Item();
         r1.setName("Item 1");
@@ -86,10 +72,6 @@ public class OrganizationViewModel extends BaseViewModel {
 
     public MutableLiveData<List<Region>> getRegionsLiveData() {
         return regionsLiveData;
-    }
-
-    public MutableLiveData<List<Category>> getCategoriesLiveData() {
-        return categoriesLiveData;
     }
 
     public MutableLiveData<List<Item>> getItemsLiveData() {

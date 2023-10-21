@@ -36,4 +36,6 @@
     <string name="items">Items</string>
     <string name="categories">Categories</string>
     <string name="coverage_area">Coverage Area</string>
+    <string name="select_regions">Select Regions</string>
+    <string name="select">Select</string>
 </resources>

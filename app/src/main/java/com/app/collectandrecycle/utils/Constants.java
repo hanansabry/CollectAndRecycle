@@ -14,4 +14,6 @@ public class Constants {
     public static final String OFFER_ID = "offer_id";
     public static final String OFFERS_NODE = "offers";
     public static final String ADMIN = "admin";
+    public static final int SELECTED_REGIONS_REQUEST_CODE = 522;
+    public static final String SELECTED_REGIONS = "selected_regions";
 }

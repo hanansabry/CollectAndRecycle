@@ -12,11 +12,15 @@ import com.app.collectandrecycle.databinding.ActivityOrganizationHomeBinding;
 import com.app.collectandrecycle.di.ViewModelProviderFactory;
 import com.app.collectandrecycle.presentation.BaseActivity;
 import com.app.collectandrecycle.presentation.MainActivity;
-import com.app.collectandrecycle.presentation.authentication.AuthenticationViewModel;
+import com.app.collectandrecycle.presentation.regions.RegionListActivity;
+import com.app.collectandrecycle.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +31,7 @@ public class OrganizationHomeActivity extends BaseActivity {
     ViewModelProviderFactory providerFactory;
     private OrganizationViewModel organizationViewModel;
     private ActivityOrganizationHomeBinding binding;
+    private OrganizationMainItemsAdapter regionsAdapter;
 
     @Override
     public View getDataBindingView() {
@@ -46,10 +51,10 @@ public class OrganizationHomeActivity extends BaseActivity {
         organizationViewModel.retrieveItems(sessionManager.getFirebaseId());
 
         organizationViewModel.getRegionsLiveData().observe(this, regions -> {
-            OrganizationMainItemsAdapter adapter = new OrganizationMainItemsAdapter(regions, null, null, Region.class.getName());
+            regionsAdapter = new OrganizationMainItemsAdapter(regions, null, null, Region.class.getName());
             LinearLayoutManager layout = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
             binding.regionsRecyclerview.setLayoutManager(layout);
-            binding.regionsRecyclerview.setAdapter(adapter);
+            binding.regionsRecyclerview.setAdapter(regionsAdapter);
         });
 
         organizationViewModel.getCategoriesLiveData().observe(this, categories -> {
@@ -71,6 +76,17 @@ public class OrganizationHomeActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.SELECTED_REGIONS_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                ArrayList<Region> selectedRegions = data.getParcelableArrayListExtra(Constants.SELECTED_REGIONS);
+                regionsAdapter.addRegions(selectedRegions);
+            }
+        }
+    }
+
     public void onLogoutClicked(View view) {
         FirebaseAuth.getInstance().signOut();
         sessionManager.logoutUser();
@@ -80,7 +96,7 @@ public class OrganizationHomeActivity extends BaseActivity {
     }
 
     public void onAddRegionClicked(View view) {
-        Toast.makeText(this, "Region", Toast.LENGTH_SHORT).show();
+        startActivityForResult(new Intent(this, RegionListActivity.class), Constants.SELECTED_REGIONS_REQUEST_CODE);
     }
 
     public void onAddCategoryClicked(View view) {

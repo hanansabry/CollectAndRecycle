@@ -15,6 +15,9 @@
         android:theme="@style/FullScreenAppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.regions.RegionListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".presentation.organization.OrganizationHomeActivity"
             android:screenOrientation="portrait" />
         <activity

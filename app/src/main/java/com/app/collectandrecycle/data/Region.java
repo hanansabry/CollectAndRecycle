@@ -1,11 +1,38 @@
 package com.app.collectandrecycle.data;
 
-public class Region {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Region implements Parcelable {
 
     private String id;
     private String name;
     private double latitude;
     private double longitude;
+
+    public Region() {
+    }
+
+    protected Region(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+    }
+
+    public static final Creator<Region> CREATOR = new Creator<Region>() {
+        @Override
+        public Region createFromParcel(Parcel in) {
+            return new Region(in);
+        }
+
+        @Override
+        public Region[] newArray(int size) {
+            return new Region[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -37,5 +64,18 @@ public class Region {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
     }
 }

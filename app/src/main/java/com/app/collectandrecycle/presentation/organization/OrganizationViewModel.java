@@ -31,9 +31,29 @@ public class OrganizationViewModel extends BaseViewModel {
 
         Region r2 = new Region();
         r2.setName("Region 2");
+
+        Region r3 = new Region();
+        r3.setName("Region 2");
+
+        Region r4 = new Region();
+        r4.setName("Region 2");
+
+        Region r5 = new Region();
+        r5.setName("Region 2");
+
+        Region r6 = new Region();
+        r6.setName("Region 2");
+
+        Region r7 = new Region();
+        r7.setName("Region 2");
         List<Region> regions = new ArrayList<>();
         regions.add(r1);
         regions.add(r2);
+//        regions.add(r3);
+//        regions.add(r4);
+//        regions.add(r5);
+//        regions.add(r6);
+//        regions.add(r7);
 
         regionsLiveData.postValue(regions);
     }

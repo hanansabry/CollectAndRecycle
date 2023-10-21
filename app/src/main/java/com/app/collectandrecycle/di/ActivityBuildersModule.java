@@ -4,6 +4,7 @@ package com.app.collectandrecycle.di;
 import com.app.collectandrecycle.di.modules.AuthenticationViewModelModule;
 import com.app.collectandrecycle.di.modules.BaseViewModelModule;
 import com.app.collectandrecycle.di.modules.OrganizationViewModelModule;
+import com.app.collectandrecycle.di.modules.RegionsViewModelModule;
 import com.app.collectandrecycle.presentation.BaseActivity;
 import com.app.collectandrecycle.presentation.MainActivity;
 import com.app.collectandrecycle.presentation.SplashActivity;
@@ -11,6 +12,7 @@ import com.app.collectandrecycle.presentation.authentication.LoginActivity;
 import com.app.collectandrecycle.presentation.authentication.RegisterActivity;
 import com.app.collectandrecycle.presentation.client.ClientHomeActivity;
 import com.app.collectandrecycle.presentation.organization.OrganizationHomeActivity;
+import com.app.collectandrecycle.presentation.regions.RegionListActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -38,5 +40,8 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = OrganizationViewModelModule.class)
     abstract OrganizationHomeActivity contributeOrganizationHomeActivity();
+
+    @ContributesAndroidInjector(modules = RegionsViewModelModule.class)
+    abstract RegionListActivity contributeRegionListActivity();
 
 }

@@ -68,6 +68,15 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
         }
     }
 
+    public void addRegions(ArrayList<Region> selectedRegions) {
+        if (regions != null) {
+            int newRegionsStartPosition = regions.size();
+            regions.addAll(selectedRegions);
+            notifyItemRangeInserted(newRegionsStartPosition, selectedRegions.size());
+//            notifyDataSetChanged();
+        }
+    }
+
     static class MainItemHolder extends RecyclerView.ViewHolder {
 
         private final OrganizationMainItemLayoutBinding binding;

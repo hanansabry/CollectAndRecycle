@@ -28,16 +28,19 @@
                 android:layout_height="100dp"
                 android:src="@drawable/map"
                 android:background="@color/colorAccentShadowTwo"
-                android:scaleType="fitCenter"/>
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
-                android:background="@color/transparent_gray"
+                android:background="@color/colorAccent"
+                android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
-                android:ellipsize="end"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:text="@{name}"
+                android:textColor="@color/white"
                 tools:text="Region namdsfsdfsdfsdsdfsdf sde" />
 
         </LinearLayout>

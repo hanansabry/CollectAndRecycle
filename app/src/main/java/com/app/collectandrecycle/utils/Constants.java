@@ -21,4 +21,5 @@ public class Constants {
     public static final String REGIONS_NODE = "regions";
     public static final String CATEGORIES_NODE = "categories";
     public static final String IMAGE_FILE_TYPE = ".jpg";
+    public static final String ITEMS_NODE = "items";
 }

@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import com.app.collectandrecycle.data.Category;
 import com.app.collectandrecycle.data.Client;
+import com.app.collectandrecycle.data.Item;
 import com.app.collectandrecycle.data.Organization;
 import com.app.collectandrecycle.data.Region;
 import com.app.collectandrecycle.utils.Constants;
@@ -280,6 +281,52 @@ public class FirebaseDataSource {
                 }
                 return imageReference.getDownloadUrl();
             });
+        });
+    }
+
+    public Observable<List<Item>> retrieveItems(String organizationId) {
+        return Observable.create(emitter -> {
+            firebaseDatabase.getReference(Constants.ORGANIZATIONS_NODE)
+                    .child(organizationId)
+                    .child(Constants.CATEGORIES_NODE)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            List<Item> items = new ArrayList<>();
+                            for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
+                                if (categorySnapshot.hasChild(Constants.ITEMS_NODE)) {
+                                    for (DataSnapshot itemSnapshot : categorySnapshot.child(Constants.ITEMS_NODE).getChildren()) {
+                                        Item item = itemSnapshot.getValue(Item.class);
+                                        if (item != null) {
+                                            item.setId(itemSnapshot.getKey());
+                                            items.add(item);
+                                        }
+                                    }
+                                }
+                            }
+                            emitter.onNext(items);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            emitter.onError(error.toException());
+                        }
+                    });
+        });
+    }
+
+    public Single<Boolean> addItem(String organizationId, String categoryId, Item item) {
+        return Single.create(emitter -> {
+            firebaseDatabase.getReference(Constants.ORGANIZATIONS_NODE)
+                    .child(organizationId)
+                    .child(Constants.CATEGORIES_NODE)
+                    .child(categoryId)
+                    .child(Constants.ITEMS_NODE)
+                    .push()
+                    .setValue(item)
+                    .addOnCompleteListener(saveTask -> {
+                        emitter.onSuccess(saveTask.isSuccessful());
+                    });
         });
     }
 }

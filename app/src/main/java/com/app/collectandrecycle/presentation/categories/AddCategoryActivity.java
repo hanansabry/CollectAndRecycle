@@ -110,6 +110,8 @@ public class AddCategoryActivity extends BaseActivity {
         String categoryName = binding.categoryEditText.getText().toString();
         if (categoryName.isEmpty()) {
             Toast.makeText(this, "You must add category name", Toast.LENGTH_SHORT).show();
+            binding.progressBar.setVisibility(View.GONE);
+            binding.saveButton.setVisibility(View.VISIBLE);
         } else {
             Category category = new Category();
             category.setName(categoryName);

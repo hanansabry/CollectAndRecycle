@@ -41,4 +41,11 @@
     <string name="add_category">Add Category</string>
     <string name="select_image">Select Image</string>
     <string name="category_name">Category Name</string>
+    <string name="add_item">Add Item</string>
+    <string name="select_category">Select Category</string>
+    <string name="item_name">Item Name</string>
+    <string name="size">Size</string>
+    <string name="large">Large</string>
+    <string name="medium">Medium</string>
+    <string name="points">Points</string>
 </resources>

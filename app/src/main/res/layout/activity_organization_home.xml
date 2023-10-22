@@ -146,31 +146,28 @@
                     android:textFontWeight="700"
                     android:textColor="@color/colorPrimary"/>
 
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp">
 
-                    <LinearLayout
+                    <include
+                        layout="@layout/add_view_layout"
+                        android:onClick="@{(v) -> activity.onAddItemClicked(v)}"
+                        app:buttonName='@{"Add Item"}' />
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/items_recyclerview"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:scrollbars="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/organization_main_item_layout" />
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/items_recyclerview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scrollbars="horizontal"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            tools:listitem="@layout/organization_main_item_layout" />
+                </LinearLayout>
 
-                        <include
-                            layout="@layout/add_view_layout"
-                            android:onClick="@{(v) -> activity.onAddItemClicked(v)}"
-                            app:buttonName='@{"Add Item"}' />
-
-                    </LinearLayout>
-
-                </HorizontalScrollView>
 
             </LinearLayout>
 

@@ -15,6 +15,9 @@
         android:theme="@style/FullScreenAppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.items.AddItemActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".presentation.categories.AddCategoryActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -48,7 +51,6 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
         </activity>
 
         <provider
@@ -62,6 +64,8 @@
         </provider>
     </application>
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 </manifest>

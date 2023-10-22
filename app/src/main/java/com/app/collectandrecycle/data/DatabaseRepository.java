@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -52,5 +53,13 @@ public class DatabaseRepository {
 
     public Single<Boolean> addCategory(String organizationId, Category category) {
         return firebaseDataSource.addCategory(organizationId, category);
+    }
+
+    public Observable<List<Item>> retrieveItems(String organizationId) {
+        return firebaseDataSource.retrieveItems(organizationId);
+    }
+
+    public Single<Boolean> addItem(String organizationId, String categoryId, Item item) {
+        return firebaseDataSource.addItem(organizationId, categoryId, item);
     }
 }

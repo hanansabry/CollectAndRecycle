@@ -4,6 +4,7 @@ package com.app.collectandrecycle.di;
 import com.app.collectandrecycle.di.modules.AuthenticationViewModelModule;
 import com.app.collectandrecycle.di.modules.BaseViewModelModule;
 import com.app.collectandrecycle.di.modules.CategoriesViewModelModule;
+import com.app.collectandrecycle.di.modules.ItemsViewModelModule;
 import com.app.collectandrecycle.di.modules.OrganizationViewModelModule;
 import com.app.collectandrecycle.di.modules.RegionsViewModelModule;
 import com.app.collectandrecycle.presentation.BaseActivity;
@@ -13,6 +14,7 @@ import com.app.collectandrecycle.presentation.authentication.LoginActivity;
 import com.app.collectandrecycle.presentation.authentication.RegisterActivity;
 import com.app.collectandrecycle.presentation.categories.AddCategoryActivity;
 import com.app.collectandrecycle.presentation.client.ClientHomeActivity;
+import com.app.collectandrecycle.presentation.items.AddItemActivity;
 import com.app.collectandrecycle.presentation.organization.OrganizationHomeActivity;
 import com.app.collectandrecycle.presentation.regions.RegionListActivity;
 
@@ -40,7 +42,7 @@ public abstract class ActivityBuildersModule {
     @ContributesAndroidInjector
     abstract ClientHomeActivity contributeClientHomeActivity();
 
-    @ContributesAndroidInjector(modules = {OrganizationViewModelModule.class, CategoriesViewModelModule.class, RegionsViewModelModule.class})
+    @ContributesAndroidInjector(modules = {ItemsViewModelModule.class, CategoriesViewModelModule.class, RegionsViewModelModule.class})
     abstract OrganizationHomeActivity contributeOrganizationHomeActivity();
 
     @ContributesAndroidInjector(modules = RegionsViewModelModule.class)
@@ -48,5 +50,8 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = CategoriesViewModelModule.class)
     abstract AddCategoryActivity contributeAddCategoryActivity();
+
+    @ContributesAndroidInjector(modules = {ItemsViewModelModule.class, CategoriesViewModelModule.class})
+    abstract AddItemActivity contributeAddItemActivity();
 
 }

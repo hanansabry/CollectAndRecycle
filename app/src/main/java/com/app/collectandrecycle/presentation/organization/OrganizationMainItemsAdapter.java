@@ -2,6 +2,7 @@ package com.app.collectandrecycle.presentation.organization;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.app.collectandrecycle.R;
 import com.app.collectandrecycle.data.Category;
@@ -98,6 +99,8 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
 
         private void bindRegion(Region region) {
             binding.setName(region.getName());
+            binding.imageView.setPadding(64, 64, 64, 64);
+            binding.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
 
         private void bindCategory(Category category) {
@@ -112,6 +115,12 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
 
         private void bindItem(Item item) {
             binding.setName(item.getName());
+            binding.imageView.setPadding(32, 32, 32, 32);
+            binding.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            Glide.with(itemView.getContext())
+                    .load(R.drawable.item2)
+                    .placeholder(R.drawable.place_holder)
+                    .into(binding.imageView);
         }
     }
 }

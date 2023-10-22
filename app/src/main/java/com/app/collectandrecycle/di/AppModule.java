@@ -8,7 +8,10 @@ import com.app.collectandrecycle.utils.Constants;
 import com.app.collectandrecycle.utils.SessionManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -27,6 +30,12 @@ public class AppModule {
     @Provides
     static FirebaseAuth provideFirebaseAuth() {
         return FirebaseAuth.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    static StorageReference provideFirebaseStorage() {
+        return FirebaseStorage.getInstance().getReference();
     }
 
     @Singleton

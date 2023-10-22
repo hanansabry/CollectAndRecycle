@@ -85,19 +85,6 @@ public class OrganizationHomeActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == Constants.ADD_CATEGORY_REQUEST_CODE) {
-                if (data != null) {
-                    Category category = data.getParcelableExtra(Constants.CATEGORY);
-                    categoriesAdapter.addCategory(category);
-                }
-            }
-        }
-    }
-
     public void onLogoutClicked(View view) {
         FirebaseAuth.getInstance().signOut();
         sessionManager.logoutUser();
@@ -111,7 +98,7 @@ public class OrganizationHomeActivity extends BaseActivity {
     }
 
     public void onAddCategoryClicked(View view) {
-        startActivityForResult(new Intent(this, AddCategoryActivity.class), Constants.ADD_CATEGORY_REQUEST_CODE);
+        startActivity(new Intent(this, AddCategoryActivity.class));
     }
 
     public void onAddItemClicked(View view) {

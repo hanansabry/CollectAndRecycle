@@ -19,4 +19,6 @@ public class Constants {
     public static final int ADD_CATEGORY_REQUEST_CODE = 111;
     public static final String CATEGORY = "category";
     public static final String REGIONS_NODE = "regions";
+    public static final String CATEGORIES_NODE = "categories";
+    public static final String IMAGE_FILE_TYPE = ".jpg";
 }

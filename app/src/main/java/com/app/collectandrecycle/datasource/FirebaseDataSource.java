@@ -1,5 +1,8 @@
 package com.app.collectandrecycle.datasource;
 
+import android.net.Uri;
+
+import com.app.collectandrecycle.data.Category;
 import com.app.collectandrecycle.data.Client;
 import com.app.collectandrecycle.data.Organization;
 import com.app.collectandrecycle.data.Region;
@@ -10,7 +13,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,11 +32,13 @@ public class FirebaseDataSource {
 
     private final FirebaseDatabase firebaseDatabase;
     private final FirebaseAuth firebaseAuth;
+    private final StorageReference storageReference;
 
     @Inject
-    public FirebaseDataSource(FirebaseDatabase firebaseDatabase, FirebaseAuth firebaseAuth) {
+    public FirebaseDataSource(FirebaseDatabase firebaseDatabase, FirebaseAuth firebaseAuth, StorageReference storageReference) {
         this.firebaseDatabase = firebaseDatabase;
         this.firebaseAuth = firebaseAuth;
+        this.storageReference = storageReference;
     }
 
     public Single<Client> loginAsClient(String email, String password) {
@@ -209,6 +218,68 @@ public class FirebaseDataSource {
             }
             databaseReference.updateChildren(updatedValues)
                     .addOnCompleteListener(task -> emitter.onSuccess(task.isSuccessful()));
+        });
+    }
+
+    public Observable<List<Category>> retrieveCategories(String organizationId) {
+        return Observable.create(emitter -> {
+            firebaseDatabase.getReference(Constants.ORGANIZATIONS_NODE)
+                    .child(organizationId)
+                    .child(Constants.CATEGORIES_NODE)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            List<Category> categories = new ArrayList<>();
+                            for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
+                                Category category = categorySnapshot.getValue(Category.class);
+                                if (category != null) {
+                                    category.setId(categorySnapshot.getKey());
+                                }
+                                categories.add(category);
+                            }
+                            emitter.onNext(categories);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            emitter.onError(error.toException());
+                        }
+                    });
+        });
+    }
+
+    public Single<Boolean> addCategory(String organizationId, Category category) {
+        return Single.create(emitter -> {
+            //upload image firstly
+            Uri imageUri = Uri.parse(category.getImage());
+            StorageReference imageReference = storageReference
+                    .child(Constants.ORGANIZATIONS_NODE + "/" +
+                            organizationId + "/" +
+                            Constants.CATEGORIES_NODE + "/" +
+                            System.currentTimeMillis() +
+                            Constants.IMAGE_FILE_TYPE);
+
+            UploadTask uploadFileTask = imageReference.putFile(imageUri);
+            uploadFileTask.continueWithTask(task -> {
+                if (!task.isSuccessful()) {
+                    emitter.onError(task.getException());
+                } else {
+                    // Continue with the fileTask to get the download URL
+                    imageReference.getDownloadUrl().addOnCompleteListener(task1 -> {
+                        String downloadUrl = task1.getResult().toString();
+                        category.setImage(downloadUrl);
+                        firebaseDatabase.getReference(Constants.ORGANIZATIONS_NODE)
+                                .child(organizationId)
+                                .child(Constants.CATEGORIES_NODE)
+                                .push()
+                                .setValue(category)
+                                .addOnCompleteListener(saveTask -> {
+                                    emitter.onSuccess(saveTask.isSuccessful());
+                                });
+                    });
+                }
+                return imageReference.getDownloadUrl();
+            });
         });
     }
 }

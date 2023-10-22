@@ -2,10 +2,14 @@ package com.app.collectandrecycle.presentation.categories;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -26,6 +30,7 @@ import javax.inject.Inject;
 
 public class AddCategoryActivity extends BaseActivity {
 
+    private static final int REQUEST_CODE_PERMISSIONS = 1;
     @Inject
     ViewModelProviderFactory providerFactory;
     private ActivityAddCategoryBinding binding;
@@ -44,11 +49,9 @@ public class AddCategoryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         registerPickImageResultLauncher();
         categoriesViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(CategoriesViewModel.class);
-        categoriesViewModel.getAddCategoryStateLiveData().observe(this, category -> {
-            if (category != null) {
-                Intent intent = new Intent();
-                intent.putExtra(Constants.CATEGORY, category);
-                setResult(RESULT_OK, intent);
+        categoriesViewModel.getAddCategoryStateLiveData().observe(this, success -> {
+            if (success != null) {
+                Toast.makeText(this, "Category is added successfully", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
                 Toast.makeText(this, "Can't add category, please try again", Toast.LENGTH_SHORT).show();
@@ -63,14 +66,14 @@ public class AddCategoryActivity extends BaseActivity {
     private void registerPickImageResultLauncher() {
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK){
+                    if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-                        if (data != null){
+                        if (data != null) {
                             selectedImageUri = data.getData();
-                            if (selectedImageUri != null){
+                            if (selectedImageUri != null) {
                                 try {
                                     binding.categoryImage.setImageURI(selectedImageUri);
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -80,8 +83,21 @@ public class AddCategoryActivity extends BaseActivity {
     }
 
     public void onSelectImageClicked(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        activityResultLauncher.launch(intent);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA
+                    , Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSIONS);
+        } else {
+            launchImagePicker();
+        }
+    }
+
+    private void launchImagePicker() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*"});
+        photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        photoPickerIntent.setAction(Intent.ACTION_GET_CONTENT);
+        activityResultLauncher.launch(photoPickerIntent);
     }
 
     public void onSaveClicked(View view) {
@@ -92,10 +108,19 @@ public class AddCategoryActivity extends BaseActivity {
             Category category = new Category();
             category.setName(categoryName);
             if (selectedImageUri != null) {
-                category.setImage(selectedImageUri.getPath());
+                category.setImage(selectedImageUri.toString());
             }
-            categoriesViewModel.addCategory(category);
+            categoriesViewModel.addCategory(sessionManager.getFirebaseId(), category);
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                launchImagePicker();
+            }
+        }
+    }
 }

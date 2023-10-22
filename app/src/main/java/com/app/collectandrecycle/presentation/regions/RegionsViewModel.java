@@ -10,10 +10,16 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.lifecycle.MutableLiveData;
+import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class RegionsViewModel extends BaseViewModel {
 
     private final MutableLiveData<List<Region>> regionsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> addRegionsStateLiveData = new MutableLiveData<>();
 
     @Inject
     public RegionsViewModel(DatabaseRepository databaseRepository) {
@@ -21,27 +27,81 @@ public class RegionsViewModel extends BaseViewModel {
     }
 
     public void retrieveAllRegions() {
-        Region r1 = new Region();
-        r1.setName("Region 55");
+        databaseRepository.retrieveAllRegions()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<Region>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable.add(d);
+                    }
 
-        Region r2 = new Region();
-        r2.setName("Region 33");
+                    @Override
+                    public void onSuccess(List<Region> regions) {
+                        regionsLiveData.setValue(regions);
+                    }
 
-        Region r3 = new Region();
-        r3.setName("Region 22");
+                    @Override
+                    public void onError(Throwable e) {
+                        errorState.setValue(e.getMessage());
+                    }
+                });
+    }
 
-        Region r4 = new Region();
-        r4.setName("Region 40");
-        List<Region> regions = new ArrayList<>();
-        regions.add(r1);
-        regions.add(r2);
-        regions.add(r2);
-        regions.add(r4);
+    public void retrieveRegions(String organizationId) {
+        databaseRepository.retrieveRegions(organizationId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Region>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable.add(d);
+                    }
 
-        regionsLiveData.postValue(regions);
+                    @Override
+                    public void onNext(List<Region> regions) {
+                        regionsLiveData.setValue(regions);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        errorState.setValue(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void addRegionsToOrganization(String organizationId, List<Region> selectedRegion) {
+        databaseRepository.addRegionsToOrganization(organizationId, selectedRegion)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean success) {
+                        addRegionsStateLiveData.setValue(success);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        errorState.setValue(e.getMessage());
+                    }
+                });
     }
 
     public MutableLiveData<List<Region>> getRegionsLiveData() {
         return regionsLiveData;
+    }
+
+    public MutableLiveData<Boolean> getAddRegionsStateLiveData() {
+        return addRegionsStateLiveData;
     }
 }

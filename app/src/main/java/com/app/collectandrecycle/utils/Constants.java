@@ -18,4 +18,5 @@ public class Constants {
     public static final String SELECTED_REGIONS = "selected_regions";
     public static final int ADD_CATEGORY_REQUEST_CODE = 111;
     public static final String CATEGORY = "category";
+    public static final String REGIONS_NODE = "regions";
 }

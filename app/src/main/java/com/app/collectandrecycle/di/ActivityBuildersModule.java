@@ -40,7 +40,7 @@ public abstract class ActivityBuildersModule {
     @ContributesAndroidInjector
     abstract ClientHomeActivity contributeClientHomeActivity();
 
-    @ContributesAndroidInjector(modules = {OrganizationViewModelModule.class, CategoriesViewModelModule.class})
+    @ContributesAndroidInjector(modules = {OrganizationViewModelModule.class, CategoriesViewModelModule.class, RegionsViewModelModule.class})
     abstract OrganizationHomeActivity contributeOrganizationHomeActivity();
 
     @ContributesAndroidInjector(modules = RegionsViewModelModule.class)

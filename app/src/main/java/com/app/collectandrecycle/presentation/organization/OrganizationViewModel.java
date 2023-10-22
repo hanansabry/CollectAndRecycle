@@ -13,48 +13,19 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.lifecycle.MutableLiveData;
+import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class OrganizationViewModel extends BaseViewModel {
 
-    private final MutableLiveData<List<Region>> regionsLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Item>> itemsLiveData = new MutableLiveData<>();
 
     @Inject
     public OrganizationViewModel(DatabaseRepository databaseRepository) {
         super(databaseRepository);
-    }
-
-    public void retrieveRegions(String organizationId) {
-        Region r1 = new Region();
-        r1.setName("Region 1");
-
-        Region r2 = new Region();
-        r2.setName("Region 2");
-
-        Region r3 = new Region();
-        r3.setName("Region 2");
-
-        Region r4 = new Region();
-        r4.setName("Region 2");
-
-        Region r5 = new Region();
-        r5.setName("Region 2");
-
-        Region r6 = new Region();
-        r6.setName("Region 2");
-
-        Region r7 = new Region();
-        r7.setName("Region 2");
-        List<Region> regions = new ArrayList<>();
-        regions.add(r1);
-        regions.add(r2);
-//        regions.add(r3);
-//        regions.add(r4);
-//        regions.add(r5);
-//        regions.add(r6);
-//        regions.add(r7);
-
-        regionsLiveData.postValue(regions);
     }
 
     public void retrieveItems(String organizationId) {
@@ -68,10 +39,6 @@ public class OrganizationViewModel extends BaseViewModel {
         items.add(r2);
 
         itemsLiveData.postValue(items);
-    }
-
-    public MutableLiveData<List<Region>> getRegionsLiveData() {
-        return regionsLiveData;
     }
 
     public MutableLiveData<List<Item>> getItemsLiveData() {

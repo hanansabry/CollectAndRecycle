@@ -105,7 +105,7 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
             if (category.getImage() != null) {
                 Glide.with(itemView.getContext())
                         .load(category.getImage())
-                        .placeholder(R.drawable.map)
+                        .placeholder(R.drawable.place_holder)
                         .into(binding.imageView);
             }
         }

@@ -50,6 +50,8 @@ public class AddCategoryActivity extends BaseActivity {
         registerPickImageResultLauncher();
         categoriesViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(CategoriesViewModel.class);
         categoriesViewModel.getAddCategoryStateLiveData().observe(this, success -> {
+            binding.progressBar.setVisibility(View.GONE);
+            binding.saveButton.setVisibility(View.VISIBLE);
             if (success != null) {
                 Toast.makeText(this, "Category is added successfully", Toast.LENGTH_SHORT).show();
                 finish();
@@ -60,6 +62,8 @@ public class AddCategoryActivity extends BaseActivity {
 
         categoriesViewModel.getErrorState().observe(this, error -> {
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+            binding.progressBar.setVisibility(View.GONE);
+            binding.saveButton.setVisibility(View.VISIBLE);
         });
     }
 
@@ -101,6 +105,8 @@ public class AddCategoryActivity extends BaseActivity {
     }
 
     public void onSaveClicked(View view) {
+        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.saveButton.setVisibility(View.GONE);
         String categoryName = binding.categoryEditText.getText().toString();
         if (categoryName.isEmpty()) {
             Toast.makeText(this, "You must add category name", Toast.LENGTH_SHORT).show();

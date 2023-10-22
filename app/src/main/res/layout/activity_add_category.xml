@@ -114,22 +114,37 @@
                     android:id="@+id/category_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerInside"/>
+                    android:layout_margin="2dp"
+                    android:scaleType="fitCenter"/>
 
             </FrameLayout>
 
         </LinearLayout>
 
-        <Button
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="@drawable/cornered_accent_bg"
-            android:onClick="onSaveClicked"
-            android:text="@string/save"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent" >
+
+            <Button
+                android:id="@+id/save_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cornered_accent_bg"
+                android:onClick="onSaveClicked"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/white"/>
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/colorAccent" />
+
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

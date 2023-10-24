@@ -2,6 +2,7 @@ package com.app.collectandrecycle.utils;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -72,6 +73,19 @@ public class Utils {
 
         // Show the date picker dialog
         datePickerDialog.show();
+    }
+
+    public static void showTimePicker(Context context, TimePickerDialog.OnTimeSetListener onTimeSetListener) {
+        // Get current date
+        Calendar timeCalendar = Calendar.getInstance();
+        int hour = timeCalendar.get(Calendar.HOUR_OF_DAY);
+        int minute = timeCalendar.get(Calendar.MINUTE);
+
+        // Create a time picker dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(context, onTimeSetListener, hour, minute, false);
+
+        // Show the time picker dialog
+        timePickerDialog.show();
     }
 
     public static void createAlertDialog(Context context, String title, String message, DialogInterface.OnClickListener approveListener) {

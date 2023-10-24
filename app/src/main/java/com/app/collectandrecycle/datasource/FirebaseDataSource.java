@@ -329,4 +329,35 @@ public class FirebaseDataSource {
                     });
         });
     }
+
+    public Observable<List<Organization>> retrieveOrganizationsOfRegion(String regionId) {
+        return Observable.create(emitter -> {
+            firebaseDatabase.getReference(Constants.ORGANIZATIONS_NODE)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            List<Organization> organizations = new ArrayList<>();
+                            for (DataSnapshot organizationSnapshot : snapshot.getChildren()) {
+                                if (organizationSnapshot.hasChild(Constants.REGIONS_NODE)) {
+                                    for (DataSnapshot regionSnapshot : organizationSnapshot.child(Constants.REGIONS_NODE).getChildren()) {
+                                        Region region = regionSnapshot.getValue(Region.class);
+                                        if (region != null && region.getId().equals(regionId)) {
+                                            Organization organization = organizationSnapshot.getValue(Organization.class);
+                                            organization.setId(organizationSnapshot.getKey());
+                                            organizations.add(organization);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            emitter.onNext(organizations);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            emitter.onError(error.toException());
+                        }
+                    });
+        });
+    }
 }

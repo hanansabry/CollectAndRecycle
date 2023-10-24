@@ -78,4 +78,9 @@ public class Region implements Parcelable {
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

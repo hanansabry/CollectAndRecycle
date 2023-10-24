@@ -62,4 +62,8 @@ public class DatabaseRepository {
     public Single<Boolean> addItem(String organizationId, String categoryId, Item item) {
         return firebaseDataSource.addItem(organizationId, categoryId, item);
     }
+
+    public Observable<List<Organization>> retrieveOrganizationsOfRegion(String regionId) {
+        return firebaseDataSource.retrieveOrganizationsOfRegion(regionId);
+    }
 }

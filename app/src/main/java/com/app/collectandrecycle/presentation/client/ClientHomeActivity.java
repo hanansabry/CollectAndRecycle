@@ -1,5 +1,6 @@
 package com.app.collectandrecycle.presentation.client;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -21,4 +22,7 @@ public class ClientHomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
+    public void onAddRequestFabClicked(View view) {
+        startActivity(new Intent(this, AddRequestActivity.class));
+    }
 }

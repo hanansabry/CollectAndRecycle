@@ -1,10 +1,10 @@
 package com.app.collectandrecycle.presentation.regions;
 
 import com.app.collectandrecycle.data.DatabaseRepository;
+import com.app.collectandrecycle.data.Organization;
 import com.app.collectandrecycle.data.Region;
 import com.app.collectandrecycle.presentation.BaseViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,6 +19,7 @@ import io.reactivex.schedulers.Schedulers;
 public class RegionsViewModel extends BaseViewModel {
 
     private final MutableLiveData<List<Region>> regionsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Organization>> organizationLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> addRegionsStateLiveData = new MutableLiveData<>();
 
     @Inject
@@ -75,6 +76,33 @@ public class RegionsViewModel extends BaseViewModel {
                 });
     }
 
+    public void retrieveOrganizationsOfRegion(String regionId) {
+        databaseRepository.retrieveOrganizationsOfRegion(regionId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Organization>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(List<Organization> organizations) {
+                        organizationLiveData.setValue(organizations);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        errorState.setValue(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     public void addRegionsToOrganization(String organizationId, List<Region> selectedRegion) {
         databaseRepository.addRegionsToOrganization(organizationId, selectedRegion)
                 .subscribeOn(Schedulers.io())
@@ -99,6 +127,10 @@ public class RegionsViewModel extends BaseViewModel {
 
     public MutableLiveData<List<Region>> getRegionsLiveData() {
         return regionsLiveData;
+    }
+
+    public MutableLiveData<List<Organization>> getOrganizationOfRegionLiveData() {
+        return organizationLiveData;
     }
 
     public MutableLiveData<Boolean> getAddRegionsStateLiveData() {

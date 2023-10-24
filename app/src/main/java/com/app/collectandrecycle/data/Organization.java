@@ -1,5 +1,7 @@
 package com.app.collectandrecycle.data;
 
+import androidx.annotation.NonNull;
+
 public class Organization {
     private String id;
     private String name;
@@ -54,5 +56,11 @@ public class Organization {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }

@@ -48,4 +48,10 @@
     <string name="large">Large</string>
     <string name="medium">Medium</string>
     <string name="points">Points</string>
+    <string name="add_new_request">Add New Request</string>
+    <string name="select_region">Select Region</string>
+    <string name="select_organization">Select Organization</string>
+    <string name="available_date">Available Date</string>
+    <string name="available_time">Available Time</string>
+    <string name="send_request">Send Request</string>
 </resources>

@@ -54,4 +54,7 @@
     <string name="available_date">Available Date</string>
     <string name="available_time">Available Time</string>
     <string name="send_request">Send Request</string>
+    <string name="next">Next</string>
+    <string name="request_details">Request Details</string>
+    <string name="request_title">Request Title</string>
 </resources>

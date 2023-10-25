@@ -16,6 +16,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<OrganizationMainItemsAdapter.MainItemHolder> {
@@ -24,6 +25,7 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
     private final List<Category> categories;
     private final List<Item> items;
     private final String className;
+    private int selectedItem;
 
     public OrganizationMainItemsAdapter(@Nullable List<Region> regions,
                                         @Nullable List<Category> categories,
@@ -51,7 +53,7 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
             holder.bindRegion(region);
         } else if (className.equals(Category.class.getName())) {
             Category category = categories.get(position);
-            holder.bindCategory(category);
+            holder.bindCategory(category, position);
         } else if (className.equals(Item.class.getName())) {
             Item item = items.get(position);
             holder.bindItem(item);
@@ -69,6 +71,11 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
         } else {
             return 0;
         }
+    }
+
+    public void setSelectedItem(int position) {
+        selectedItem = position;
+        notifyDataSetChanged();
     }
 
     public void addRegions(ArrayList<Region> selectedRegions) {
@@ -103,7 +110,13 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
             binding.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
 
-        private void bindCategory(Category category) {
+        private void bindCategory(Category category, int position) {
+            itemView.setSelected(selectedItem == position);
+            if (itemView.isSelected()) {
+                itemView.setBackground(AppCompatResources.getDrawable(itemView.getContext(),R.drawable.gray_dashed_stroke_cornered));
+            } else {
+                itemView.setBackground(null);
+            }
             binding.setName(category.getName());
             if (category.getImage() != null) {
                 Glide.with(itemView.getContext())
@@ -122,5 +135,9 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
                     .placeholder(R.drawable.place_holder)
                     .into(binding.imageView);
         }
+    }
+
+    public interface CategoriesClickListener {
+        void onCategoryClicked(Category category);
     }
 }

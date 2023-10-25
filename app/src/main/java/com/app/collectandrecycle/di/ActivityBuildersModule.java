@@ -19,6 +19,7 @@ import com.app.collectandrecycle.presentation.client.ClientHomeActivity;
 import com.app.collectandrecycle.presentation.items.AddItemActivity;
 import com.app.collectandrecycle.presentation.organization.OrganizationHomeActivity;
 import com.app.collectandrecycle.presentation.regions.RegionListActivity;
+import com.app.collectandrecycle.presentation.requesets.AddRequestDetailsActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -56,7 +57,10 @@ public abstract class ActivityBuildersModule {
     @ContributesAndroidInjector(modules = {ItemsViewModelModule.class, CategoriesViewModelModule.class})
     abstract AddItemActivity contributeAddItemActivity();
 
-    @ContributesAndroidInjector(modules = {RegionsViewModelModule.class, RequestsViewModelModule.class})
+    @ContributesAndroidInjector(modules = RegionsViewModelModule.class)
     abstract AddRequestActivity contributeAddRequestActivity();
+
+    @ContributesAndroidInjector(modules = {RequestsViewModelModule.class, CategoriesViewModelModule.class})
+    abstract AddRequestDetailsActivity contributeAddRequestDetailsActivity();
 
 }

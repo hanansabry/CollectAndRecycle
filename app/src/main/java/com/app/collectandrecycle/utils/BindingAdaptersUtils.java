@@ -21,6 +21,13 @@ public class BindingAdaptersUtils {
         }
     }
 
+    @BindingAdapter("time")
+    public static void bindTime(TextView textView, Long milliseconds) {
+        if (milliseconds != null) {
+            textView.setText(Utils.convertMillisecondsToDate(milliseconds, Constants.TIME_FORMAT));
+        }
+    }
+
     @BindingAdapter("delivery")
     public static void bindDelivery(TextView textView, boolean isDelivery) {
         if (isDelivery) {

@@ -360,4 +360,33 @@ public class FirebaseDataSource {
                     });
         });
     }
+
+    public Observable<List<Item>> retrieveCategoryItems(String organizationId, String categoryId) {
+        return Observable.create(emitter -> {
+            firebaseDatabase.getReference(Constants.ORGANIZATIONS_NODE)
+                    .child(organizationId)
+                    .child(Constants.CATEGORIES_NODE)
+                    .child(categoryId)
+                    .child(Constants.ITEMS_NODE)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            List<Item> items = new ArrayList<>();
+                            for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
+                                Item item = itemSnapshot.getValue(Item.class);
+                                if (item != null) {
+                                    item.setId(itemSnapshot.getKey());
+                                }
+                                items.add(item);
+                            }
+                            emitter.onNext(items);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            emitter.onError(error.toException());
+                        }
+                    });
+        });
+    }
 }

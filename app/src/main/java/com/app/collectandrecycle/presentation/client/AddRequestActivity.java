@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,10 +15,12 @@ import android.widget.Toast;
 
 import com.app.collectandrecycle.data.Organization;
 import com.app.collectandrecycle.data.Region;
+import com.app.collectandrecycle.data.models.Request;
 import com.app.collectandrecycle.databinding.ActivityAddRequestBinding;
 import com.app.collectandrecycle.di.ViewModelProviderFactory;
 import com.app.collectandrecycle.presentation.BaseActivity;
 import com.app.collectandrecycle.presentation.regions.RegionsViewModel;
+import com.app.collectandrecycle.presentation.requesets.AddRequestDetailsActivity;
 import com.app.collectandrecycle.utils.Constants;
 import com.app.collectandrecycle.utils.Utils;
 
@@ -48,7 +51,6 @@ public class AddRequestActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         calendar = Calendar.getInstance();
         regionsViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(RegionsViewModel.class);
-        RequestsViewModel requestsViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(RequestsViewModel.class);
 
         regionsViewModel.retrieveAllRegions();
         regionsViewModel.getRegionsLiveData().observe(this, this::initiateRegionsSpinner);
@@ -124,7 +126,25 @@ public class AddRequestActivity extends BaseActivity {
         binding.regionsSpinner.performClick();
     }
 
-    public void onSendRequestClicked(View view) {
-        Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+    public void onNextClicked(View view) {
+        String requestTitle = binding.titleEditText.getText().toString();
+        long dateTime = calendar.getTimeInMillis();
+
+        if (requestTitle.isEmpty() || selectedRegion == null || selectedOrganization == null) {
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+        } else {
+            Request request = new Request();
+            request.setTitle(requestTitle);
+            request.setClientId(sessionManager.getFirebaseId());
+            request.setClientName(sessionManager.getUserName());
+            request.setOrganizationId(selectedOrganization.getId());
+            request.setOrganizationName(selectedOrganization.getName());
+            request.setDateTime(dateTime);
+            request.setStatus(Request.RequestStatus.New.name());
+
+            Intent intent = new Intent(this, AddRequestDetailsActivity.class);
+            intent.putExtra(Constants.REQUEST, request);
+            startActivity(intent);
+        }
     }
 }

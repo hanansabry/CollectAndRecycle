@@ -8,6 +8,7 @@ public class Constants {
     public static final String CLIENTS_NODE = "clients";
     public static final String ORGANIZATIONS_NODE = "organizations";
     public static final String DATE_FORMAT = "dd MMM,yyyy";
+    public static final String TIME_FORMAT = "hh:mm";
     public static final String ORDERS_NODE = "orders";
     public static final String TYPES_NODE = "types";
     public static final String ORDER_ID = "order_id";
@@ -22,4 +23,6 @@ public class Constants {
     public static final String CATEGORIES_NODE = "categories";
     public static final String IMAGE_FILE_TYPE = ".jpg";
     public static final String ITEMS_NODE = "items";
+
+    public static final String REQUEST = "request";
 }

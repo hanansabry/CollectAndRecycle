@@ -66,4 +66,8 @@ public class DatabaseRepository {
     public Observable<List<Organization>> retrieveOrganizationsOfRegion(String regionId) {
         return firebaseDataSource.retrieveOrganizationsOfRegion(regionId);
     }
+
+    public Observable<List<Item>> retrieveCategoryItems(String organizationId, String categoryId) {
+        return firebaseDataSource.retrieveCategoryItems(organizationId, categoryId);
+    }
 }

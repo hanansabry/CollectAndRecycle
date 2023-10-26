@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.app.collectandrecycle.data.Category;
 import com.app.collectandrecycle.data.Item;
 import com.app.collectandrecycle.data.models.Request;
+import com.app.collectandrecycle.data.models.RequestItem;
 import com.app.collectandrecycle.databinding.ActivityAddRequestDetailsBinding;
 import com.app.collectandrecycle.di.ViewModelProviderFactory;
 import com.app.collectandrecycle.presentation.BaseActivity;
@@ -16,6 +17,8 @@ import com.app.collectandrecycle.presentation.organization.OrganizationMainItems
 import com.app.collectandrecycle.utils.Constants;
 import com.app.collectandrecycle.utils.RecyclerItemClickListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +34,10 @@ public class AddRequestDetailsActivity extends BaseActivity {
     private ActivityAddRequestDetailsBinding binding;
     private CategoriesViewModel categoriesViewModel;
     private Request request;
+    private HashMap<String, RequestItemsAdapter> categoryItemsAdapterMap = new HashMap<>();
+    private String lastCategorySelected;
+    private RequestItemsAdapter itemsAdapter;
+    private RequestsViewModel requestsViewModel;
 
     @Override
     public View getDataBindingView() {
@@ -44,11 +51,20 @@ public class AddRequestDetailsActivity extends BaseActivity {
         request = getIntent().getParcelableExtra(Constants.REQUEST);
         binding.setRequest(request);
 
-        RequestsViewModel requestsViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(RequestsViewModel.class);
+        requestsViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(RequestsViewModel.class);
         categoriesViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(CategoriesViewModel.class);
         categoriesViewModel.retrieveCategories(request.getOrganizationId());
         categoriesViewModel.getCategoriesLiveData().observe(this, this::populateCategoriesRecyclerView);
         categoriesViewModel.getItemsLiveData().observe(this, this::populateItemsRecyclerView);
+
+        requestsViewModel.getAddRequestStateViewModel().observe(this, success -> {
+            if (success) {
+                Toast.makeText(this, "Request is added successfully", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, "Error while adding request, Please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void populateCategoriesRecyclerView(List<Category> categories) {
@@ -60,11 +76,13 @@ public class AddRequestDetailsActivity extends BaseActivity {
             binding.categoriesRecyclerview.addOnItemTouchListener(
                     new RecyclerItemClickListener(this, binding.categoriesRecyclerview,
                             (view, position) -> {
+                                lastCategorySelected = categories.get(position).getId();
                                 categoriesAdapter.setSelectedItem(position);
                                 categoriesViewModel.retrieveCategoryItems(request.getOrganizationId(), categories.get(position).getId());
                             }));
             //retrieve items of first category
             categoriesViewModel.retrieveCategoryItems(request.getOrganizationId(), categories.get(0).getId());
+            lastCategorySelected = categories.get(0).getId();
         }
     }
 
@@ -73,7 +91,12 @@ public class AddRequestDetailsActivity extends BaseActivity {
             binding.itemsHeader.setVisibility(View.VISIBLE);
             binding.itemsRecyclerview.setVisibility(View.VISIBLE);
 
-            RequestItemsAdapter itemsAdapter = new RequestItemsAdapter(items);
+            if (categoryItemsAdapterMap.containsKey(lastCategorySelected)) {
+                itemsAdapter = categoryItemsAdapterMap.get(lastCategorySelected);
+            } else {
+                itemsAdapter = new RequestItemsAdapter(items);
+                categoryItemsAdapterMap.put(lastCategorySelected, itemsAdapter);
+            }
             binding.itemsRecyclerview.setAdapter(itemsAdapter);
         } else {
             binding.itemsHeader.setVisibility(View.GONE);
@@ -82,5 +105,26 @@ public class AddRequestDetailsActivity extends BaseActivity {
     }
 
     public void onSendRequestClicked(View view) {
+        List<RequestItem> requestItemList = new ArrayList<>();
+        for (String categoryId : categoryItemsAdapterMap.keySet()) {
+            RequestItemsAdapter requestItemsAdapter = categoryItemsAdapterMap.get(categoryId);
+            List<Item> categoryItems = requestItemsAdapter.getItemList();
+            for (int position : requestItemsAdapter.getQuantitiesEditTextValues().keySet()) {
+                String quantity = requestItemsAdapter.getQuantitiesEditTextValues().get(position);
+                if (quantity != null && !quantity.isEmpty()) {
+                    RequestItem requestItem = new RequestItem();
+                    requestItem.setItem(categoryItems.get(position));
+                    requestItem.setQuantity(Double.parseDouble(quantity));
+                    requestItemList.add(requestItem);
+                }
+            }
+        }
+
+        if (requestItemList.isEmpty()) {
+            Toast.makeText(this, "You must select at least one item", Toast.LENGTH_SHORT).show();
+        } else {
+            request.setRequestItemList(requestItemList);
+            requestsViewModel.addNewRequest(request);
+        }
     }
 }

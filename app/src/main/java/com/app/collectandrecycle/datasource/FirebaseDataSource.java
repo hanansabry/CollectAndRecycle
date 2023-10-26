@@ -7,7 +7,11 @@ import com.app.collectandrecycle.data.Client;
 import com.app.collectandrecycle.data.Item;
 import com.app.collectandrecycle.data.Organization;
 import com.app.collectandrecycle.data.Region;
+import com.app.collectandrecycle.data.models.Request;
+import com.app.collectandrecycle.data.models.RequestItem;
 import com.app.collectandrecycle.utils.Constants;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -387,6 +391,15 @@ public class FirebaseDataSource {
                             emitter.onError(error.toException());
                         }
                     });
+        });
+    }
+
+    public Single<Boolean> addNewRequest(Request request) {
+        return Single.create(emitter -> {
+            firebaseDatabase.getReference(Constants.REQUESTS_NODE)
+                    .push()
+                    .setValue(request)
+                    .addOnCompleteListener(task -> emitter.onSuccess(task.isSuccessful()));
         });
     }
 }

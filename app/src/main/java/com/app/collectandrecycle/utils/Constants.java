@@ -25,4 +25,5 @@ public class Constants {
     public static final String ITEMS_NODE = "items";
 
     public static final String REQUEST = "request";
+    public static final String REQUESTS_NODE = "requests";
 }

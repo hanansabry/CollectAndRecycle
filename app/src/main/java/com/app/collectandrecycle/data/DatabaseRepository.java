@@ -1,5 +1,6 @@
 package com.app.collectandrecycle.data;
 
+import com.app.collectandrecycle.data.models.Request;
 import com.app.collectandrecycle.datasource.FirebaseDataSource;
 
 import java.util.List;
@@ -69,5 +70,9 @@ public class DatabaseRepository {
 
     public Observable<List<Item>> retrieveCategoryItems(String organizationId, String categoryId) {
         return firebaseDataSource.retrieveCategoryItems(organizationId, categoryId);
+    }
+
+    public Single<Boolean> addNewRequest(Request request) {
+        return firebaseDataSource.addNewRequest(request);
     }
 }

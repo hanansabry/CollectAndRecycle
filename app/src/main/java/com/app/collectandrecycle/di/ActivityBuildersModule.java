@@ -18,6 +18,7 @@ import com.app.collectandrecycle.presentation.client.AddRequestActivity;
 import com.app.collectandrecycle.presentation.client.ClientHomeActivity;
 import com.app.collectandrecycle.presentation.items.AddItemActivity;
 import com.app.collectandrecycle.presentation.organization.OrganizationHomeActivity;
+import com.app.collectandrecycle.presentation.organization.OrganizationRequestsActivity;
 import com.app.collectandrecycle.presentation.regions.RegionListActivity;
 import com.app.collectandrecycle.presentation.requesets.AddRequestDetailsActivity;
 
@@ -62,5 +63,8 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = {RequestsViewModelModule.class, CategoriesViewModelModule.class})
     abstract AddRequestDetailsActivity contributeAddRequestDetailsActivity();
+
+    @ContributesAndroidInjector(modules = RequestsViewModelModule.class)
+    abstract OrganizationRequestsActivity contributeOrganizationRequestsActivity();
 
 }

@@ -79,4 +79,9 @@ public class DatabaseRepository {
     public Observable<List<Request>> retrieveClientRequests(String clientId) {
         return firebaseDataSource.retrieveClientRequests(clientId);
     }
+
+    public Observable<List<Request>> retrieveOrganizationRequests(String organizationId) {
+        return firebaseDataSource.retrieveOrganizationRequests(organizationId);
+
+    }
 }

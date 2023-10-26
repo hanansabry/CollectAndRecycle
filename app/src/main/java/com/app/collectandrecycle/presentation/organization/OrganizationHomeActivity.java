@@ -101,5 +101,6 @@ public class OrganizationHomeActivity extends BaseActivity {
     }
 
     public void onShowRequestsClicked(View view) {
+        startActivity(new Intent(this, OrganizationRequestsActivity.class));
     }
 }

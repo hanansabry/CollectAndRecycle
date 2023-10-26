@@ -81,8 +81,9 @@ public class AddRequestDetailsActivity extends BaseActivity {
                                 categoriesViewModel.retrieveCategoryItems(request.getOrganizationId(), categories.get(position).getId());
                             }));
             //retrieve items of first category
-            categoriesViewModel.retrieveCategoryItems(request.getOrganizationId(), categories.get(0).getId());
+            categoriesAdapter.setSelectedItem(0);
             lastCategorySelected = categories.get(0).getId();
+            categoriesViewModel.retrieveCategoryItems(request.getOrganizationId(), categories.get(0).getId());
         }
     }
 

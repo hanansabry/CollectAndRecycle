@@ -25,7 +25,7 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
     private final List<Category> categories;
     private final List<Item> items;
     private final String className;
-    private int selectedItem;
+    private int selectedItem = -1;
 
     public OrganizationMainItemsAdapter(@Nullable List<Region> regions,
                                         @Nullable List<Category> categories,
@@ -113,9 +113,11 @@ public class OrganizationMainItemsAdapter extends RecyclerView.Adapter<Organizat
         private void bindCategory(Category category, int position) {
             itemView.setSelected(selectedItem == position);
             if (itemView.isSelected()) {
-                itemView.setBackground(AppCompatResources.getDrawable(itemView.getContext(),R.drawable.gray_dashed_stroke_cornered));
+                binding.parent.setBackground(AppCompatResources.getDrawable(itemView.getContext(),R.drawable.gray_dashed_stroke_cornered));
+                binding.parent.setPadding(16,16,16,16);
             } else {
-                itemView.setBackground(null);
+                binding.parent.setBackground(null);
+                binding.parent.setPadding(0,0,0,0);
             }
             binding.setName(category.getName());
             if (category.getImage() != null) {

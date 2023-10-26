@@ -1,7 +1,6 @@
 package com.app.collectandrecycle.presentation.requesets;
 
 import com.app.collectandrecycle.data.DatabaseRepository;
-import com.app.collectandrecycle.data.Organization;
 import com.app.collectandrecycle.data.models.Request;
 import com.app.collectandrecycle.presentation.BaseViewModel;
 
@@ -50,6 +49,33 @@ public class RequestsViewModel extends BaseViewModel {
 
     public void retrieveClientRequests(String clientId) {
         databaseRepository.retrieveClientRequests(clientId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Request>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(List<Request> requests) {
+                        requestsViewModel.setValue(requests);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        errorState.setValue(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void retrieveOrganizationRequests(String organizationId) {
+        databaseRepository.retrieveOrganizationRequests(organizationId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<Request>>() {

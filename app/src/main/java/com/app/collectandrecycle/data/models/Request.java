@@ -135,6 +135,6 @@ public class Request implements Parcelable {
     }
 
     public enum RequestStatus {
-        New, Pending, Delivered
+        New, Confirmed, Delivered
     }
 }

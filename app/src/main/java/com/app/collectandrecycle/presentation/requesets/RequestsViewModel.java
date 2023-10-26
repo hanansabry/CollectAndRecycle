@@ -10,7 +10,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.core.util.Pair;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Observer;
 import io.reactivex.SingleObserver;
@@ -20,11 +19,11 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RequestsViewModel extends BaseViewModel {
 
-    private final MutableLiveData<Boolean> addRequestStateViewModel = new MutableLiveData<>();
-    private final MutableLiveData<List<Request>> requestsViewModel = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> addRequestStateLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Request>> requestsLiveData = new MutableLiveData<>();
     private final MutableLiveData<Request> requestDetailsLiveData = new MutableLiveData<>();
     private final MutableLiveData<Client> clientDetailsLiveData = new MutableLiveData<>();
-    private final MediatorLiveData<Pair<Request, Client>> requestClientLiveData = new MediatorLiveData<>();
+    private final MutableLiveData<Boolean> requestStatusLiveData = new MutableLiveData<>();
 
     @Inject
     public RequestsViewModel(DatabaseRepository databaseRepository) {
@@ -43,7 +42,7 @@ public class RequestsViewModel extends BaseViewModel {
 
                     @Override
                     public void onSuccess(Boolean success) {
-                        addRequestStateViewModel.setValue(success);
+                        addRequestStateLiveData.setValue(success);
                     }
 
                     @Override
@@ -65,7 +64,7 @@ public class RequestsViewModel extends BaseViewModel {
 
                     @Override
                     public void onNext(List<Request> requests) {
-                        requestsViewModel.setValue(requests);
+                        requestsLiveData.setValue(requests);
                     }
 
                     @Override
@@ -92,7 +91,7 @@ public class RequestsViewModel extends BaseViewModel {
 
                     @Override
                     public void onNext(List<Request> requests) {
-                        requestsViewModel.setValue(requests);
+                        requestsLiveData.setValue(requests);
                     }
 
                     @Override
@@ -130,12 +129,34 @@ public class RequestsViewModel extends BaseViewModel {
                 });
     }
 
-    public MutableLiveData<Boolean> getAddRequestStateViewModel() {
-        return addRequestStateViewModel;
+    public void setRequestStatus(Request request, String status) {
+        databaseRepository.setRequestStatus(request, status)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean success) {
+                        requestStatusLiveData.setValue(success);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        errorState.setValue(e.getMessage());
+                    }
+                });
     }
 
-    public MutableLiveData<List<Request>> getRequestsViewModel() {
-        return requestsViewModel;
+    public MutableLiveData<Boolean> getAddRequestStateLiveData() {
+        return addRequestStateLiveData;
+    }
+
+    public MutableLiveData<List<Request>> getRequestsLiveData() {
+        return requestsLiveData;
     }
 
     public MutableLiveData<Request> getRequestDetailsLiveData() {
@@ -144,5 +165,9 @@ public class RequestsViewModel extends BaseViewModel {
 
     public MutableLiveData<Client> getClientDetailsLiveData() {
         return clientDetailsLiveData;
+    }
+
+    public MutableLiveData<Boolean> getRequestStatusLiveData() {
+        return requestStatusLiveData;
     }
 }

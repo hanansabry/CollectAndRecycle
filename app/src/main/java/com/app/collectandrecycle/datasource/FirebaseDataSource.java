@@ -497,4 +497,47 @@ public class FirebaseDataSource {
                     });
         });
     }
+
+    public Single<Boolean> setRequestStatus(Request request, String status) {
+        return Single.create(emitter -> {
+            firebaseDatabase.getReference(Constants.REQUESTS_NODE)
+                    .child(request.getId())
+                    .child("status")
+                    .setValue(status)
+                    .addOnCompleteListener(task -> {
+                        emitter.onSuccess(task.isSuccessful());
+                        //add this request points to the client's data if the status is delivered
+                        if (status.equals(Request.RequestStatus.Delivered.name())) {
+                            //firstly get current client's point then add new points to it
+                            firebaseDatabase.getReference(Constants.CLIENTS_NODE)
+                                    .child(request.getClientId())
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            Client client = snapshot.getValue(Client.class);
+                                            Double currentPoints = 0.0;
+                                            if (snapshot.hasChild("points") && snapshot.child("points").getValue() != null) {
+                                                currentPoints = snapshot.child("points").getValue(Double.class);
+                                            }
+                                            Double newPoints = calculateRequestPoints(request.getRequestItemList()) + currentPoints;
+                                            snapshot.child("points").getRef().setValue(newPoints);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            emitter.onError(error.toException());
+                                        }
+                                    });
+                        }
+                    });
+        });
+    }
+
+    private Double calculateRequestPoints(List<RequestItem> requestItemList) {
+        double points = 0.0;
+        for (RequestItem requestItem : requestItemList) {
+            points += requestItem.getItem().getPoints() * requestItem.getQuantity();
+        }
+        return points;
+    }
 }

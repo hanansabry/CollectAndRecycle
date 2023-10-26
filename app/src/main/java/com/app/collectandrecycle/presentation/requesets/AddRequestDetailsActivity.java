@@ -56,7 +56,7 @@ public class AddRequestDetailsActivity extends BaseActivity {
         categoriesViewModel.getCategoriesLiveData().observe(this, this::populateCategoriesRecyclerView);
         categoriesViewModel.getItemsLiveData().observe(this, this::populateItemsRecyclerView);
 
-        requestsViewModel.getAddRequestStateViewModel().observe(this, success -> {
+        requestsViewModel.getAddRequestStateLiveData().observe(this, success -> {
             if (success) {
                 Toast.makeText(this, "Request is added successfully", Toast.LENGTH_SHORT).show();
                 setResult(RESULT_OK);

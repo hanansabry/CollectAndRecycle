@@ -1,8 +1,13 @@
 package com.app.collectandrecycle.utils;
 
+import android.view.View;
 import android.widget.TextView;
 
+import com.app.collectandrecycle.data.models.Request;
+
 import androidx.databinding.BindingAdapter;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class BindingAdaptersUtils {
 
@@ -32,6 +37,29 @@ public class BindingAdaptersUtils {
     public static void bindDateTime(TextView textView, Long milliseconds) {
         if (milliseconds != null) {
             textView.setText(Utils.convertMillisecondsToDate(milliseconds, Constants.DATE_TIME_FORMAT));
+        }
+    }
+
+    @BindingAdapter("confirmVisibility")
+    public static void bindConfirmVisibility(TextView textView, String status) {
+        if (status.equals(Request.RequestStatus.New.name())) {
+            textView.setVisibility(View.VISIBLE);
+        } else if (status.equals(Request.RequestStatus.Confirmed.name())
+                || status.equals(Request.RequestStatus.Delivered.name())) {
+            textView.setVisibility(View.GONE);
+        }
+    }
+
+    @BindingAdapter("deliverVisibility")
+    public static void bindDeliverVisibility(TextView textView, String status) {
+        if (status.equals(Request.RequestStatus.New.name())) {
+            textView.setVisibility(View.VISIBLE);
+        } else if (status.equals(Request.RequestStatus.Delivered.name())) {
+            textView.setVisibility(View.GONE);
+        } else {
+            //status is confirmed
+            textView.setVisibility(View.VISIBLE);
+            textView.setWidth(MATCH_PARENT);
         }
     }
 

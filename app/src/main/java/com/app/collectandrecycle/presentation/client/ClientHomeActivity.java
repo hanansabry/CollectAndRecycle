@@ -37,7 +37,7 @@ public class ClientHomeActivity extends BaseActivity implements RequestsAdapter.
         super.onCreate(savedInstanceState);
         RequestsViewModel requestsViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(RequestsViewModel.class);
         requestsViewModel.retrieveClientRequests(sessionManager.getFirebaseId());
-        requestsViewModel.getRequestsViewModel().observe(this, this::populateRequestsRecyclerView);
+        requestsViewModel.getRequestsLiveData().observe(this, this::populateRequestsRecyclerView);
 
         requestsViewModel.getErrorState().observe(this, error -> {
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show();

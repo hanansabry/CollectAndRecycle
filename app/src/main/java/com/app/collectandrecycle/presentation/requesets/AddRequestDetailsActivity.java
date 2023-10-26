@@ -12,7 +12,6 @@ import com.app.collectandrecycle.databinding.ActivityAddRequestDetailsBinding;
 import com.app.collectandrecycle.di.ViewModelProviderFactory;
 import com.app.collectandrecycle.presentation.BaseActivity;
 import com.app.collectandrecycle.presentation.categories.CategoriesViewModel;
-import com.app.collectandrecycle.presentation.client.RequestsViewModel;
 import com.app.collectandrecycle.presentation.organization.OrganizationMainItemsAdapter;
 import com.app.collectandrecycle.utils.Constants;
 import com.app.collectandrecycle.utils.RecyclerItemClickListener;
@@ -60,6 +59,7 @@ public class AddRequestDetailsActivity extends BaseActivity {
         requestsViewModel.getAddRequestStateViewModel().observe(this, success -> {
             if (success) {
                 Toast.makeText(this, "Request is added successfully", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
                 finish();
             } else {
                 Toast.makeText(this, "Error while adding request, Please try again", Toast.LENGTH_SHORT).show();

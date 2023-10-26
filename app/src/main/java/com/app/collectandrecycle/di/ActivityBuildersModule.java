@@ -42,7 +42,7 @@ public abstract class ActivityBuildersModule {
     @ContributesAndroidInjector(modules = AuthenticationViewModelModule.class)
     abstract LoginActivity contributeLoginActivity();
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = RequestsViewModelModule.class)
     abstract ClientHomeActivity contributeClientHomeActivity();
 
     @ContributesAndroidInjector(modules = {ItemsViewModelModule.class, CategoriesViewModelModule.class, RegionsViewModelModule.class})

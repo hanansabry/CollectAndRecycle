@@ -57,4 +57,5 @@
     <string name="next">Next</string>
     <string name="request_details">Request Details</string>
     <string name="request_title">Request Title</string>
+    <string name="your_requests">Your Requests</string>
 </resources>

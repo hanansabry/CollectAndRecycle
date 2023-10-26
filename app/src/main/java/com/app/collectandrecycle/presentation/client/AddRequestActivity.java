@@ -1,5 +1,6 @@
 package com.app.collectandrecycle.presentation.client;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.DatePickerDialog;
@@ -144,7 +145,15 @@ public class AddRequestActivity extends BaseActivity {
 
             Intent intent = new Intent(this, AddRequestDetailsActivity.class);
             intent.putExtra(Constants.REQUEST, request);
-            startActivity(intent);
+            startActivityForResult(intent, Constants.REQUEST_DETAILS_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_DETAILS_REQUEST_CODE && resultCode == RESULT_OK) {
+            finish();
         }
     }
 }

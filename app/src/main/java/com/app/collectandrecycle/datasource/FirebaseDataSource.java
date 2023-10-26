@@ -402,4 +402,31 @@ public class FirebaseDataSource {
                     .addOnCompleteListener(task -> emitter.onSuccess(task.isSuccessful()));
         });
     }
+
+    public Observable<List<Request>> retrieveClientRequests(String clientId) {
+        return Observable.create(emitter -> {
+            firebaseDatabase.getReference(Constants.REQUESTS_NODE)
+                    .orderByChild("clientId")
+                    .equalTo(clientId)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            List<Request> requests = new ArrayList<>();
+                            for (DataSnapshot requestSnapshot : snapshot.getChildren()) {
+                                Request request = requestSnapshot.getValue(Request.class);
+                                if (request != null) {
+                                    request.setId(requestSnapshot.getKey());
+                                }
+                                requests.add(request);
+                            }
+                            emitter.onNext(requests);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            emitter.onError(error.toException());
+                        }
+                    });
+        });
+    }
 }

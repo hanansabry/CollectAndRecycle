@@ -1,8 +1,7 @@
 package com.app.collectandrecycle.di.modules;
 
 import com.app.collectandrecycle.di.ViewModelKey;
-import com.app.collectandrecycle.presentation.client.RequestsViewModel;
-import com.app.collectandrecycle.presentation.regions.RegionsViewModel;
+import com.app.collectandrecycle.presentation.requesets.RequestsViewModel;
 
 import androidx.lifecycle.ViewModel;
 import dagger.Binds;

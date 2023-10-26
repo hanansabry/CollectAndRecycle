@@ -15,6 +15,9 @@
         android:theme="@style/FullScreenAppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.organization.OrganizationRequestDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".presentation.organization.OrganizationRequestsActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -73,8 +76,8 @@
         </provider>
     </application>
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

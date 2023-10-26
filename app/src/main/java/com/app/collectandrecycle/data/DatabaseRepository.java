@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.core.util.Pair;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -83,5 +84,9 @@ public class DatabaseRepository {
     public Observable<List<Request>> retrieveOrganizationRequests(String organizationId) {
         return firebaseDataSource.retrieveOrganizationRequests(organizationId);
 
+    }
+
+    public Single<Pair<Request, Client>> retrieveRequestDetails(String requestId) {
+        return firebaseDataSource.retrieveRequestDetails(requestId);
     }
 }

@@ -2,6 +2,7 @@ package com.app.collectandrecycle.presentation.organization;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import com.app.collectandrecycle.di.ViewModelProviderFactory;
 import com.app.collectandrecycle.presentation.BaseActivity;
 import com.app.collectandrecycle.presentation.requesets.RequestsAdapter;
 import com.app.collectandrecycle.presentation.requesets.RequestsViewModel;
+import com.app.collectandrecycle.utils.Constants;
 
 import java.util.List;
 
@@ -50,6 +52,9 @@ public class OrganizationRequestsActivity extends BaseActivity implements Reques
 
     @Override
     public void onRequestClick(Request request) {
-        Toast.makeText(this, request.getTitle(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, OrganizationRequestDetailsActivity.class);
+        intent.putExtra(Constants.REQUEST, request.getId());
+        intent.putExtra(Constants.CLIENT, request.getClientId());
+        startActivity(intent);
     }
 }

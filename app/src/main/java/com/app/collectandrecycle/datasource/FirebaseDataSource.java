@@ -30,6 +30,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -447,6 +448,46 @@ public class FirebaseDataSource {
                                 requests.add(request);
                             }
                             emitter.onNext(requests);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            emitter.onError(error.toException());
+                        }
+                    });
+        });
+    }
+
+    public Single<Pair<Request, Client>> retrieveRequestDetails(String requestId) {
+        return Single.create(emitter -> {
+            firebaseDatabase.getReference(Constants.REQUESTS_NODE)
+                    .child(requestId)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Request request = snapshot.getValue(Request.class);
+                            if (request != null) {
+                                request.setId(snapshot.getKey());
+                                //get client details
+                                firebaseDatabase.getReference(Constants.CLIENTS_NODE)
+                                        .child(request.getClientId())
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                Client client = snapshot.getValue(Client.class);
+                                                if (client != null) {
+                                                    client.setId(snapshot.getKey());
+                                                }
+                                                Pair<Request, Client> requestClientPair = new Pair<>(request, client);
+                                                emitter.onSuccess(requestClientPair);
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                emitter.onError(error.toException());
+                                            }
+                                        });
+                            }
                         }
 
                         @Override

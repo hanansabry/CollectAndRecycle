@@ -58,4 +58,10 @@
     <string name="request_details">Request Details</string>
     <string name="request_title">Request Title</string>
     <string name="your_requests">Your Requests</string>
+    <string name="request_number">Request Number</string>
+    <string name="client_name">Client Name</string>
+    <string name="date_and_time"><![CDATA[Date & Time]]></string>
+    <string name="request_items">Request Items</string>
+    <string name="confirm">Confirm</string>
+    <string name="deliver">Deliver</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.app.collectandrecycle.presentation.organization;
+package com.app.collectandrecycle.presentation.requesets;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,9 +6,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.app.collectandrecycle.data.models.Request;
-import com.app.collectandrecycle.databinding.ActivityOrganizationRequestDetailsBinding;
+import com.app.collectandrecycle.databinding.ActivityRequestDetailsBinding;
 import com.app.collectandrecycle.di.ViewModelProviderFactory;
 import com.app.collectandrecycle.presentation.BaseActivity;
+import com.app.collectandrecycle.presentation.organization.OrganizationRequestItemsAdapter;
 import com.app.collectandrecycle.presentation.requesets.RequestsViewModel;
 import com.app.collectandrecycle.utils.Constants;
 
@@ -16,17 +17,17 @@ import javax.inject.Inject;
 
 import androidx.lifecycle.ViewModelProvider;
 
-public class OrganizationRequestDetailsActivity extends BaseActivity {
+public class RequestDetailsActivity extends BaseActivity {
 
     @Inject
     ViewModelProviderFactory providerFactory;
-    private ActivityOrganizationRequestDetailsBinding binding;
+    private ActivityRequestDetailsBinding binding;
     private RequestsViewModel requestsViewModel;
     private Request request;
 
     @Override
     public View getDataBindingView() {
-        binding = ActivityOrganizationRequestDetailsBinding.inflate(getLayoutInflater());
+        binding = ActivityRequestDetailsBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }
 
@@ -34,6 +35,7 @@ public class OrganizationRequestDetailsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String requestId = getIntent().getStringExtra(Constants.REQUEST);
+        boolean isClient = getIntent().getBooleanExtra(Constants.IS_CLIENT, false);
 
         requestsViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(RequestsViewModel.class);
         requestsViewModel.retrieveRequestDetails(requestId);
@@ -45,19 +47,21 @@ public class OrganizationRequestDetailsActivity extends BaseActivity {
                 OrganizationRequestItemsAdapter adapter = new OrganizationRequestItemsAdapter(request.getRequestItemList());
                 binding.reuqestItemsRecyclerview.setAdapter(adapter);
 
-                if (request.getStatus().equals(Request.RequestStatus.New.name())) {
-                    binding.deliverButton.setVisibility(View.VISIBLE);
-                    binding.confirmButton.setVisibility(View.VISIBLE);
-                } else if (request.getStatus().equals(Request.RequestStatus.Delivered.name())) {
-                    binding.deliverButton.setVisibility(View.GONE);
-                    binding.confirmButton.setVisibility(View.GONE);
-                } else {
-                    //status is confirmed
-                    binding.deliverButton.setVisibility(View.VISIBLE);
-                    binding.confirmButton.setVisibility(View.GONE);
-                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) binding.deliverButton.getLayoutParams();
-                    layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                    binding.deliverButton.setLayoutParams(layoutParams);
+                if (!isClient) {
+                    if (request.getStatus().equals(Request.RequestStatus.New.name())) {
+                        binding.deliverButton.setVisibility(View.VISIBLE);
+                        binding.confirmButton.setVisibility(View.VISIBLE);
+                    } else if (request.getStatus().equals(Request.RequestStatus.Delivered.name())) {
+                        binding.deliverButton.setVisibility(View.GONE);
+                        binding.confirmButton.setVisibility(View.GONE);
+                    } else {
+                        //status is confirmed
+                        binding.deliverButton.setVisibility(View.VISIBLE);
+                        binding.confirmButton.setVisibility(View.GONE);
+                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) binding.deliverButton.getLayoutParams();
+                        layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                        binding.deliverButton.setLayoutParams(layoutParams);
+                    }
                 }
             }
         });

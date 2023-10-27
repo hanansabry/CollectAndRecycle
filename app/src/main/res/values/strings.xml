@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CollectAndRecycle</string>
+    <string name="app_name"><![CDATA[Collect & Recycle]]></string>
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
     <string name="delete_dialog_general_title">Delete Item</string>

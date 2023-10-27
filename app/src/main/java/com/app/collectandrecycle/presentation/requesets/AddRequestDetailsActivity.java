@@ -69,6 +69,7 @@ public class AddRequestDetailsActivity extends BaseActivity {
 
     private void populateCategoriesRecyclerView(List<Category> categories) {
         if (categories != null && !categories.isEmpty()) {
+            binding.categoriesProgressbar.setVisibility(View.GONE);
             OrganizationMainItemsAdapter categoriesAdapter = new OrganizationMainItemsAdapter(null, categories, null, Category.class.getName());
             LinearLayoutManager layout = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
             binding.categoriesRecyclerview.setLayoutManager(layout);

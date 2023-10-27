@@ -21,6 +21,7 @@ public class RequestsViewModel extends BaseViewModel {
 
     private final MutableLiveData<Boolean> addRequestStateLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Request>> requestsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Double> clientPointsLiveData = new MutableLiveData<>();
     private final MutableLiveData<Request> requestDetailsLiveData = new MutableLiveData<>();
     private final MutableLiveData<Client> clientDetailsLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> requestStatusLiveData = new MutableLiveData<>();
@@ -56,15 +57,16 @@ public class RequestsViewModel extends BaseViewModel {
         databaseRepository.retrieveClientRequests(clientId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Request>>() {
+                .subscribe(new Observer<Pair<List<Request>, Double>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposable.add(d);
                     }
 
                     @Override
-                    public void onNext(List<Request> requests) {
-                        requestsLiveData.setValue(requests);
+                    public void onNext(Pair<List<Request>, Double> requestsPointsPair) {
+                        requestsLiveData.setValue(requestsPointsPair.first);
+                        clientPointsLiveData.setValue(requestsPointsPair.second);
                     }
 
                     @Override
@@ -169,5 +171,9 @@ public class RequestsViewModel extends BaseViewModel {
 
     public MutableLiveData<Boolean> getRequestStatusLiveData() {
         return requestStatusLiveData;
+    }
+
+    public MutableLiveData<Double> getClientPointsLiveData() {
+        return clientPointsLiveData;
     }
 }

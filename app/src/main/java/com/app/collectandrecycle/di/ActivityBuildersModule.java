@@ -5,7 +5,6 @@ import com.app.collectandrecycle.di.modules.AuthenticationViewModelModule;
 import com.app.collectandrecycle.di.modules.BaseViewModelModule;
 import com.app.collectandrecycle.di.modules.CategoriesViewModelModule;
 import com.app.collectandrecycle.di.modules.ItemsViewModelModule;
-import com.app.collectandrecycle.di.modules.OrganizationViewModelModule;
 import com.app.collectandrecycle.di.modules.RegionsViewModelModule;
 import com.app.collectandrecycle.di.modules.RequestsViewModelModule;
 import com.app.collectandrecycle.presentation.BaseActivity;
@@ -18,7 +17,7 @@ import com.app.collectandrecycle.presentation.client.AddRequestActivity;
 import com.app.collectandrecycle.presentation.client.ClientHomeActivity;
 import com.app.collectandrecycle.presentation.items.AddItemActivity;
 import com.app.collectandrecycle.presentation.organization.OrganizationHomeActivity;
-import com.app.collectandrecycle.presentation.organization.OrganizationRequestDetailsActivity;
+import com.app.collectandrecycle.presentation.requesets.RequestDetailsActivity;
 import com.app.collectandrecycle.presentation.organization.OrganizationRequestsActivity;
 import com.app.collectandrecycle.presentation.regions.RegionListActivity;
 import com.app.collectandrecycle.presentation.requesets.AddRequestDetailsActivity;
@@ -69,6 +68,6 @@ public abstract class ActivityBuildersModule {
     abstract OrganizationRequestsActivity contributeOrganizationRequestsActivity();
 
     @ContributesAndroidInjector(modules = RequestsViewModelModule.class)
-    abstract OrganizationRequestDetailsActivity contributeOrganizationRequestDetailsActivity();
+    abstract RequestDetailsActivity contributeOrganizationRequestDetailsActivity();
 
 }

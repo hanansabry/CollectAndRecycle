@@ -78,16 +78,35 @@
                 tools:text="New" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 app:layout_constraintTop_toBottomOf="@id/request_date"
                 app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/points"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12dp"
                 android:text='@{String.format("Req#: %1s", request.id)}'
                 tools:text="Req#: sdfsdkljkd"/>
+
+            <TextView
+                android:id="@+id/points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@color/colorPrimary"
+                android:paddingStart="8dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:points="@{request.requestItemList}"
+                bind:showPoints="@{request.status}"
+                tools:text="Points: 50" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -167,13 +167,25 @@
                 android:textFontWeight="700"
                 android:textSize="16sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/categories_recyclerview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:scrollbars="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/categories_recyclerview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:scrollbars="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+                <ProgressBar
+                    android:id="@+id/categories_progressbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+
+            </FrameLayout>
 
             <LinearLayout
                 android:id="@+id/items_header"
@@ -242,7 +254,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/cornered_accent_bg"
                 android:onClick="onSendRequestClicked"
-                android:text="@string/next"
+                android:text="@string/send_request"
                 android:textAllCaps="false"
                 android:textColor="@color/white"/>
 

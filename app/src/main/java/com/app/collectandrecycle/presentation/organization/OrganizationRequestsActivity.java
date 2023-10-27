@@ -11,6 +11,7 @@ import com.app.collectandrecycle.data.models.Request;
 import com.app.collectandrecycle.databinding.ActivityOrganizationRequestsBinding;
 import com.app.collectandrecycle.di.ViewModelProviderFactory;
 import com.app.collectandrecycle.presentation.BaseActivity;
+import com.app.collectandrecycle.presentation.requesets.RequestDetailsActivity;
 import com.app.collectandrecycle.presentation.requesets.RequestsAdapter;
 import com.app.collectandrecycle.presentation.requesets.RequestsViewModel;
 import com.app.collectandrecycle.utils.Constants;
@@ -47,12 +48,13 @@ public class OrganizationRequestsActivity extends BaseActivity implements Reques
         if (requests != null && !requests.isEmpty()) {
             RequestsAdapter requestsAdapter = new RequestsAdapter(requests, this);
             binding.requestsRecyclerview.setAdapter(requestsAdapter);
+            binding.progressBar.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onRequestClick(Request request) {
-        Intent intent = new Intent(this, OrganizationRequestDetailsActivity.class);
+        Intent intent = new Intent(this, RequestDetailsActivity.class);
         intent.putExtra(Constants.REQUEST, request.getId());
         intent.putExtra(Constants.CLIENT, request.getClientId());
         startActivity(intent);

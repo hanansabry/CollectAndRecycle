@@ -28,4 +28,5 @@ public class Constants {
     public static final String REQUESTS_NODE = "requests";
     public static final String DATE_TIME_FORMAT = "dd MMM,yyyy - hh:mm aa";
     public static final int REQUEST_DETAILS_REQUEST_CODE = 5;
+    public static final String IS_CLIENT = "is_client";
 }

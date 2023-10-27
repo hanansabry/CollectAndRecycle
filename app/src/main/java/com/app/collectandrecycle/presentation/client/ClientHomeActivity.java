@@ -10,8 +10,10 @@ import com.app.collectandrecycle.databinding.ActivityClientHomeBinding;
 import com.app.collectandrecycle.di.ViewModelProviderFactory;
 import com.app.collectandrecycle.presentation.BaseActivity;
 import com.app.collectandrecycle.presentation.MainActivity;
+import com.app.collectandrecycle.presentation.requesets.RequestDetailsActivity;
 import com.app.collectandrecycle.presentation.requesets.RequestsAdapter;
 import com.app.collectandrecycle.presentation.requesets.RequestsViewModel;
+import com.app.collectandrecycle.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -35,9 +37,11 @@ public class ClientHomeActivity extends BaseActivity implements RequestsAdapter.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding.setTotalPoints(0.0);
         RequestsViewModel requestsViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(RequestsViewModel.class);
         requestsViewModel.retrieveClientRequests(sessionManager.getFirebaseId());
         requestsViewModel.getRequestsLiveData().observe(this, this::populateRequestsRecyclerView);
+        requestsViewModel.getClientPointsLiveData().observe(this, totalPoints -> binding.setTotalPoints(totalPoints));
 
         requestsViewModel.getErrorState().observe(this, error -> {
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
@@ -48,6 +52,7 @@ public class ClientHomeActivity extends BaseActivity implements RequestsAdapter.
         if (requests != null && !requests.isEmpty()) {
             RequestsAdapter requestsAdapter = new RequestsAdapter(requests, this);
             binding.requestsRecyclerview.setAdapter(requestsAdapter);
+            binding.progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -57,7 +62,10 @@ public class ClientHomeActivity extends BaseActivity implements RequestsAdapter.
 
     @Override
     public void onRequestClick(Request request) {
-        Toast.makeText(this, request.getTitle(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, RequestDetailsActivity.class);
+        intent.putExtra(Constants.REQUEST, request.getId());
+        intent.putExtra(Constants.IS_CLIENT, true);
+        startActivity(intent);
     }
 
     public void onLogoutClicked(View view) {

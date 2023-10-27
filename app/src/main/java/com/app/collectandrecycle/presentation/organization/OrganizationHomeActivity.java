@@ -44,7 +44,7 @@ public class OrganizationHomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding.setActivity(this);
-        binding.setName("ABC");
+        binding.setName(sessionManager.getUserName());
 
         CategoriesViewModel categoriesViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(CategoriesViewModel.class);
         RegionsViewModel regionsViewModel = new ViewModelProvider(getViewModelStore(), providerFactory).get(RegionsViewModel.class);
@@ -59,6 +59,7 @@ public class OrganizationHomeActivity extends BaseActivity {
             LinearLayoutManager layout = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
             binding.regionsRecyclerview.setLayoutManager(layout);
             binding.regionsRecyclerview.setAdapter(regionsAdapter);
+            binding.regionsProgressbar.setVisibility(View.GONE);
         });
 
         categoriesViewModel.getCategoriesLiveData().observe(this, categories -> {
@@ -66,6 +67,7 @@ public class OrganizationHomeActivity extends BaseActivity {
             LinearLayoutManager layout = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
             binding.categoriesRecyclerview.setLayoutManager(layout);
             binding.categoriesRecyclerview.setAdapter(categoriesAdapter);
+            binding.categoriesProgressbar.setVisibility(View.GONE);
         });
 
         itemsViewModel.getItemsLiveData().observe(this, items -> {
@@ -73,9 +75,16 @@ public class OrganizationHomeActivity extends BaseActivity {
             LinearLayoutManager layout = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
             binding.itemsRecyclerview.setLayoutManager(layout);
             binding.itemsRecyclerview.setAdapter(adapter);
+            binding.itemsProgressbar.setVisibility(View.GONE);
         });
 
         itemsViewModel.getErrorState().observe(this, error -> {
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        });
+        categoriesViewModel.getErrorState().observe(this, error -> {
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        });
+        regionsViewModel.getErrorState().observe(this, error -> {
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
         });
     }

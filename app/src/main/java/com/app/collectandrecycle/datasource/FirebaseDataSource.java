@@ -10,19 +10,15 @@ import com.app.collectandrecycle.data.Region;
 import com.app.collectandrecycle.data.models.Request;
 import com.app.collectandrecycle.data.models.RequestItem;
 import com.app.collectandrecycle.utils.Constants;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -404,7 +400,7 @@ public class FirebaseDataSource {
         });
     }
 
-    public Observable<List<Request>> retrieveClientRequests(String clientId) {
+    public Observable<Pair<List<Request>, Double>> retrieveClientRequests(String clientId) {
         return Observable.create(emitter -> {
             firebaseDatabase.getReference(Constants.REQUESTS_NODE)
                     .orderByChild("clientId")
@@ -420,7 +416,26 @@ public class FirebaseDataSource {
                                 }
                                 requests.add(request);
                             }
-                            emitter.onNext(requests);
+                            //get client points
+                            firebaseDatabase.getReference(Constants.CLIENTS_NODE)
+                                    .child(clientId)
+                                    .child("points")
+                                    .addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            Double totalPoints = 0.0;
+                                            if (snapshot.getValue() != null)  {
+                                                totalPoints = snapshot.getValue(Double.class);
+                                            }
+                                            Pair<List<Request>, Double> requestsPointsPair = new Pair<>(requests, totalPoints);
+                                            emitter.onNext(requestsPointsPair);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            emitter.onError(error.toException());
+                                        }
+                                    });
                         }
 
                         @Override

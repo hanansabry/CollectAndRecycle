@@ -76,7 +76,7 @@ public class DatabaseRepository {
         return firebaseDataSource.addNewRequest(request);
     }
 
-    public Observable<List<Request>> retrieveClientRequests(String clientId) {
+    public Observable<Pair<List<Request>, Double>> retrieveClientRequests(String clientId) {
         return firebaseDataSource.retrieveClientRequests(clientId);
     }
 

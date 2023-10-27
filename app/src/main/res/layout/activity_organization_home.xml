@@ -99,6 +99,13 @@
                         android:onClick="@{(v) -> activity.onAddRegionClicked(v)}"
                         app:buttonName='@{"Add Region"}' />
 
+                    <ProgressBar
+                        android:id="@+id/regions_progressbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:layout_gravity="center"/>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/regions_recyclerview"
                         android:layout_width="wrap_content"
@@ -126,13 +133,17 @@
                         android:onClick="@{(v) -> activity.onAddCategoryClicked(v)}"
                         app:buttonName='@{"Add Category"}' />
 
+                    <ProgressBar
+                        android:id="@+id/categories_progressbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:layout_gravity="center"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/categories_recyclerview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scrollbars="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/organization_main_item_layout" />
 
                 </LinearLayout>
@@ -157,6 +168,13 @@
                         android:onClick="@{(v) -> activity.onAddItemClicked(v)}"
                         app:buttonName='@{"Add Item"}' />
 
+
+                    <ProgressBar
+                        android:id="@+id/items_progressbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:layout_gravity="center"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/items_recyclerview"

@@ -4,6 +4,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.app.collectandrecycle.data.models.Request;
+import com.app.collectandrecycle.data.models.RequestItem;
+
+import java.util.List;
 
 import androidx.databinding.BindingAdapter;
 
@@ -40,27 +43,23 @@ public class BindingAdaptersUtils {
         }
     }
 
-    @BindingAdapter("confirmVisibility")
-    public static void bindConfirmVisibility(TextView textView, String status) {
-        if (status.equals(Request.RequestStatus.New.name())) {
+    @BindingAdapter({"bind:points", "bind:showPoints"})
+    public static void bindDateTime(TextView textView, List<RequestItem> requestItemList, String status) {
+        double requestPoints = calculateRequestPoints(requestItemList);
+        if (status.equals(Request.RequestStatus.Delivered.name())) {
+            textView.setText(String.format("Points: %s", requestPoints));
             textView.setVisibility(View.VISIBLE);
-        } else if (status.equals(Request.RequestStatus.Confirmed.name())
-                || status.equals(Request.RequestStatus.Delivered.name())) {
+        } else {
             textView.setVisibility(View.GONE);
         }
     }
 
-    @BindingAdapter("deliverVisibility")
-    public static void bindDeliverVisibility(TextView textView, String status) {
-        if (status.equals(Request.RequestStatus.New.name())) {
-            textView.setVisibility(View.VISIBLE);
-        } else if (status.equals(Request.RequestStatus.Delivered.name())) {
-            textView.setVisibility(View.GONE);
-        } else {
-            //status is confirmed
-            textView.setVisibility(View.VISIBLE);
-            textView.setWidth(MATCH_PARENT);
+    private static Double calculateRequestPoints(List<RequestItem> requestItemList) {
+        double points = 0.0;
+        for (RequestItem requestItem : requestItemList) {
+            points += requestItem.getItem().getPoints() * requestItem.getQuantity();
         }
+        return points;
     }
 
     @BindingAdapter("delivery")
